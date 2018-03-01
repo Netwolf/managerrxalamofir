@@ -9,7 +9,7 @@
 import UIKit
 import ObjectMapper
 
-class Album: Mappable {
+class Album: Codable, Mappable {
     
     var id = 0
     var name: String = ""

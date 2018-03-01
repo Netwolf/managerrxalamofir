@@ -21,7 +21,7 @@
 		C13063F1202B8DBB00FD74FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C13063EF202B8DBB00FD74FD /* LaunchScreen.storyboard */; };
 		C133C27D203B3BF00020FECA /* ObservableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133C27C203B3BF00020FECA /* ObservableType.swift */; };
 		C1482B5B203718F2001D8870 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1482B5A203718F2001D8870 /* Request.swift */; };
-		C1482B5D2037198E001D8870 /* ObjectClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1482B5C2037198E001D8870 /* ObjectClass.swift */; };
+		C1482B5D2037198E001D8870 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1482B5C2037198E001D8870 /* Album.swift */; };
 		EAFEDB9F87704310693EE87D /* Pods_RxAlamofireMyMixtapez.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B126B2C36BB0D98BFA96B75 /* Pods_RxAlamofireMyMixtapez.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +44,7 @@
 		C13063F2202B8DBC00FD74FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C133C27C203B3BF00020FECA /* ObservableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ObservableType.swift; path = RxAlamofireMyMixtapez/Api/ObservableType.swift; sourceTree = SOURCE_ROOT; };
 		C1482B5A203718F2001D8870 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Request.swift; path = RxAlamofireMyMixtapez/Api/Request.swift; sourceTree = SOURCE_ROOT; };
-		C1482B5C2037198E001D8870 /* ObjectClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectClass.swift; sourceTree = "<group>"; };
+		C1482B5C2037198E001D8870 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		CC5E8CE74EFA5101E4B49006 /* Pods-RxAlamofireMyMixtapez.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxAlamofireMyMixtapez.release.xcconfig"; path = "Pods/Target Support Files/Pods-RxAlamofireMyMixtapez/Pods-RxAlamofireMyMixtapez.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,7 +112,7 @@
 				C13063ED202B8DBB00FD74FD /* Assets.xcassets */,
 				C13063EF202B8DBB00FD74FD /* LaunchScreen.storyboard */,
 				C13063F2202B8DBC00FD74FD /* Info.plist */,
-				C1482B5C2037198E001D8870 /* ObjectClass.swift */,
+				C1482B5C2037198E001D8870 /* Album.swift */,
 				AE18582D204711400062126F /* Extensions.swift */,
 			);
 			path = RxAlamofireMyMixtapez;
@@ -272,7 +272,7 @@
 				AE18582E204711400062126F /* Extensions.swift in Sources */,
 				AE1858262046E6EA0062126F /* AlbumService.swift in Sources */,
 				AE185830204731E40062126F /* RequestManager.swift in Sources */,
-				C1482B5D2037198E001D8870 /* ObjectClass.swift in Sources */,
+				C1482B5D2037198E001D8870 /* Album.swift in Sources */,
 				C13063E7202B8DBB00FD74FD /* AppDelegate.swift in Sources */,
 				C1482B5B203718F2001D8870 /* Request.swift in Sources */,
 				AE185833204756CB0062126F /* Teste.swift in Sources */,
