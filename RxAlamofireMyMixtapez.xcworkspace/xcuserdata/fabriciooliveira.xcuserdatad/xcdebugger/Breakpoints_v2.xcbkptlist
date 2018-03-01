@@ -19,53 +19,5 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "RxAlamofireMyMixtapez/AlbumService.swift"
-            timestampString = "541605405.4207259"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
-            landmarkName = "listVeryNew()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "RxAlamofireMyMixtapez.AlbumService.listVeryNew() -&gt; ()"
-                  moduleName = "RxAlamofireMyMixtapez"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/fabriciooliveira/Documents/Workspace/ManagerAlamofire/RxAlamofireMyMixtapez/AlbumService.swift"
-                  timestampString = "541605405.860674"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "200">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (RxAlamofireMyMixtapez.APIResponseError) -&gt; () in RxAlamofireMyMixtapez.AlbumService.listVeryNew() -&gt; ()"
-                  moduleName = "RxAlamofireMyMixtapez"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/fabriciooliveira/Documents/Workspace/ManagerAlamofire/RxAlamofireMyMixtapez/AlbumService.swift"
-                  timestampString = "541605405.862596"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "16">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

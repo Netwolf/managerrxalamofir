@@ -13,16 +13,6 @@ import RxSwift
 import Alamofire
 import RxAlamofire
 
-//protocol RequestDelegate {
-//    associatedtype T
-//    func refreshTokenError()
-//    func requestFinishedWith(error: String)
-//    func requestFinished() -> T
-//}
-
-
-
-
 enum Result<T, U> where U: APIResponseError  {
     case success(T)
     case error(U)
