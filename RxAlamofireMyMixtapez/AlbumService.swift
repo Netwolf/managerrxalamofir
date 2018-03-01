@@ -29,7 +29,7 @@ struct AlbumService {
 
 
 func listVeryNew() {
-    RequestManager.getRequest(url: "/v2/albums/features", object: Album.self, onSuccess: { (object) in
+    RequestManager.fetcheListOfObject(url: "/v2/albums/features", object: Album.self, onSuccess: { (object) in
         
         
     }) { (error) in
