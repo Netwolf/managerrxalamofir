@@ -7,9 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE1858262046E6EA0062126F /* AlbumService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1858252046E6EA0062126F /* AlbumService.swift */; };
+		AE1858282046E7110062126F /* AlbumBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1858272046E7110062126F /* AlbumBusiness.swift */; };
+		AE18582A2046E7570062126F /* AlbumViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1858292046E7570062126F /* AlbumViewModel.swift */; };
+		AE18582E204711400062126F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE18582D204711400062126F /* Extensions.swift */; };
+		AE185830204731E40062126F /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE18582F204731E40062126F /* RequestManager.swift */; };
+		AE185833204756CB0062126F /* Teste.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE185832204756CB0062126F /* Teste.swift */; };
 		C10F80F72044869F007C13A1 /* ConfigurationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10F80F62044869F007C13A1 /* ConfigurationRequest.swift */; };
 		C13063E7202B8DBB00FD74FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13063E6202B8DBB00FD74FD /* AppDelegate.swift */; };
-		C13063E9202B8DBB00FD74FD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13063E8202B8DBB00FD74FD /* ViewController.swift */; };
+		C13063E9202B8DBB00FD74FD /* AlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13063E8202B8DBB00FD74FD /* AlbumViewController.swift */; };
 		C13063EC202B8DBB00FD74FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C13063EA202B8DBB00FD74FD /* Main.storyboard */; };
 		C13063EE202B8DBB00FD74FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C13063ED202B8DBB00FD74FD /* Assets.xcassets */; };
 		C13063F1202B8DBB00FD74FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C13063EF202B8DBB00FD74FD /* LaunchScreen.storyboard */; };
@@ -22,10 +28,16 @@
 /* Begin PBXFileReference section */
 		35712FE81441C54D8897337D /* Pods-RxAlamofireMyMixtapez.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxAlamofireMyMixtapez.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RxAlamofireMyMixtapez/Pods-RxAlamofireMyMixtapez.debug.xcconfig"; sourceTree = "<group>"; };
 		8B126B2C36BB0D98BFA96B75 /* Pods_RxAlamofireMyMixtapez.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RxAlamofireMyMixtapez.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE1858252046E6EA0062126F /* AlbumService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlbumService.swift; path = RxAlamofireMyMixtapez/AlbumService.swift; sourceTree = SOURCE_ROOT; };
+		AE1858272046E7110062126F /* AlbumBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlbumBusiness.swift; path = RxAlamofireMyMixtapez/AlbumBusiness.swift; sourceTree = SOURCE_ROOT; };
+		AE1858292046E7570062126F /* AlbumViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlbumViewModel.swift; path = RxAlamofireMyMixtapez/AlbumViewModel.swift; sourceTree = SOURCE_ROOT; };
+		AE18582D204711400062126F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		AE18582F204731E40062126F /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RequestManager.swift; path = RxAlamofireMyMixtapez/Api/RequestManager.swift; sourceTree = SOURCE_ROOT; };
+		AE185832204756CB0062126F /* Teste.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Teste.swift; path = RxAlamofireMyMixtapez/Api/Teste.swift; sourceTree = SOURCE_ROOT; };
 		C10F80F62044869F007C13A1 /* ConfigurationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ConfigurationRequest.swift; path = RxAlamofireMyMixtapez/Api/ConfigurationRequest.swift; sourceTree = SOURCE_ROOT; };
 		C13063E3202B8DBB00FD74FD /* RxAlamofireMyMixtapez.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RxAlamofireMyMixtapez.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C13063E6202B8DBB00FD74FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C13063E8202B8DBB00FD74FD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C13063E8202B8DBB00FD74FD /* AlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewController.swift; sourceTree = "<group>"; };
 		C13063EB202B8DBB00FD74FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C13063ED202B8DBB00FD74FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C13063F0202B8DBB00FD74FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -60,8 +72,10 @@
 			isa = PBXGroup;
 			children = (
 				C1482B5A203718F2001D8870 /* Request.swift */,
+				AE18582F204731E40062126F /* RequestManager.swift */,
 				C133C27C203B3BF00020FECA /* ObservableType.swift */,
 				C10F80F62044869F007C13A1 /* ConfigurationRequest.swift */,
+				AE185832204756CB0062126F /* Teste.swift */,
 			);
 			name = Api;
 			path = "New Group";
@@ -90,12 +104,16 @@
 			children = (
 				C109904B2035C6F7009AFEBA /* Api */,
 				C13063E6202B8DBB00FD74FD /* AppDelegate.swift */,
-				C13063E8202B8DBB00FD74FD /* ViewController.swift */,
+				AE1858252046E6EA0062126F /* AlbumService.swift */,
+				AE1858272046E7110062126F /* AlbumBusiness.swift */,
+				AE1858292046E7570062126F /* AlbumViewModel.swift */,
+				C13063E8202B8DBB00FD74FD /* AlbumViewController.swift */,
 				C13063EA202B8DBB00FD74FD /* Main.storyboard */,
 				C13063ED202B8DBB00FD74FD /* Assets.xcassets */,
 				C13063EF202B8DBB00FD74FD /* LaunchScreen.storyboard */,
 				C13063F2202B8DBC00FD74FD /* Info.plist */,
 				C1482B5C2037198E001D8870 /* ObjectClass.swift */,
+				AE18582D204711400062126F /* Extensions.swift */,
 			);
 			path = RxAlamofireMyMixtapez;
 			sourceTree = "<group>";
@@ -246,12 +264,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE18582A2046E7570062126F /* AlbumViewModel.swift in Sources */,
 				C133C27D203B3BF00020FECA /* ObservableType.swift in Sources */,
-				C13063E9202B8DBB00FD74FD /* ViewController.swift in Sources */,
+				C13063E9202B8DBB00FD74FD /* AlbumViewController.swift in Sources */,
 				C10F80F72044869F007C13A1 /* ConfigurationRequest.swift in Sources */,
+				AE1858282046E7110062126F /* AlbumBusiness.swift in Sources */,
+				AE18582E204711400062126F /* Extensions.swift in Sources */,
+				AE1858262046E6EA0062126F /* AlbumService.swift in Sources */,
+				AE185830204731E40062126F /* RequestManager.swift in Sources */,
 				C1482B5D2037198E001D8870 /* ObjectClass.swift in Sources */,
 				C13063E7202B8DBB00FD74FD /* AppDelegate.swift in Sources */,
 				C1482B5B203718F2001D8870 /* Request.swift in Sources */,
+				AE185833204756CB0062126F /* Teste.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,7 +15,7 @@ extension ObservableType {
     public func mapRequest() -> Observable<String> {
         return map { (arg) -> String in
             
-            if let (response, json) = (arg as? (HTTPURLResponse, Any)){
+            if let (response, json) = (arg as? (HTTPURLResponse, Any)) {
                 
                 if let error = self.checkResponseError(urlResponse: response, json: json) {
                     throw error
@@ -35,11 +35,11 @@ extension ObservableType {
         }
     }
     
-    func checkResponseError(urlResponse: HTTPURLResponse, json: Any) -> APIResponseError?{
+    func checkResponseError(urlResponse: HTTPURLResponse, json: Any) -> APIResponseError? {
         
         print("status code: \(urlResponse.statusCode)")
         if urlResponse.statusCode > 400 {
-            if let recipe =  Mapper<APIResponseError>().map(JSON: json as! [String : Any]){
+            if let recipe =  Mapper<APIResponseError>().map(JSON: json as! [String : Any]) {
                 return recipe
             }
         }

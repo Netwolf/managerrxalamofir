@@ -108,11 +108,11 @@ extension RequestVariable {
         
     }
     
-    public static func saveTokens(tokens: RefreshToken){
+    public static func saveTokens(tokens: RefreshToken) {
         Request.Token.AccessToken = tokens.accessToken
         Request.Token.RefreshToken = tokens.refreshToken
         Request.Token.TokenType = tokens.tokenType
-        Request.Token.RefreshDate = Date().add(second: Int(tokens.expiresIn )) as NSObject
+        Request.Token.RefreshDate = Date().add(second: Int(tokens.expiresIn)) as NSObject
     }
     
     public static func clearTokens() {
@@ -124,14 +124,5 @@ extension RequestVariable {
         defaults.removeObject(forKey: RestShipRefreshURL)
         defaults.removeObject(forKey: RestShipDate)
     }
-    
-}
-
-extension Date {
-    
-    func add(second: Int) -> Date {
-        return Calendar(identifier: .gregorian).date(byAdding: .second, value: second, to: self)!
-    }
-    
 }
 

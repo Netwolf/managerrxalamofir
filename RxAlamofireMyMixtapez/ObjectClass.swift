@@ -42,6 +42,7 @@ class Status: Mappable {
     var status: ErrorT?
     
     required init?(map: Map) {
+        
     }
     
     func mapping(map: Map) {
@@ -83,7 +84,7 @@ class Post: Mappable {
     }
 }
 
-class APIResponseError :  Error, Mappable {
+class APIResponseError: Error, Mappable {
     
     var error_code : Int = -1
     var error_description : String = "Could not decode object"
@@ -97,16 +98,13 @@ class APIResponseError :  Error, Mappable {
     func mapping(map: Map) {
         error_code <- map["error_code"]
         error_description <- map["error_description"]
-    }
-    
+    }    
 }
 
 public struct ObjectRequest<T> {
     var objectResponse: T?
     var arrayResponse: [T]?
 }
-
-
 
 class RefreshToken: Mappable {
     
