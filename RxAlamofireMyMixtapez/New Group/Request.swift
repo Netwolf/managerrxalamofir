@@ -63,7 +63,7 @@ class Request {
     public static func requestNew() -> Observable<(HTTPURLResponse, Any)> {
         
         //headers["Authorization"] = "\(Request.Token.TokenType) \(Request.Token.AccessToken)"
-        headers["Authorization"] = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjAwMDA5MDMsInVzZXJfbmFtZSI6IjAiLCJhdXRob3JpdGllcyI6WyJST0xFX0dVRVNUIl0sImp0aSI6ImJjM2I0ZWY3LTlhMjUtNDA1MS1iOWRkLTc0NWU1MWI0NjY5NSIsImNsaWVudF9pZCI6ImlvcyIsInNjb3BlIjpbInJlYWQiXX0.wlbxH_bh9kONXNc8jCWtpg2NFgNVRDbwMrRT44LCRiw"
+        headers["Authorization"] = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjAwMjE0OTksInVzZXJfbmFtZSI6IjE2ODE1ODA0IiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6ImJiNzVkMDg5LTljY2EtNDg1Yy05N2Q5LTc5ODk3YzIyYTc1MiIsImNsaWVudF9pZCI6ImlvcyIsInNjb3BlIjpbIndyaXRlIiwicmVhZCJdfQ.g1NyI3bGxEw66QiiZS8b4us8PM7QH564mSx57-tqAvg"
         headers["Content-Type"] = "application/json"
         headers["Accept-Encoding"] = "gzip"
         

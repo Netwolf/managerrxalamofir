@@ -18,8 +18,35 @@ struct AlbumBusiness {
     
     var albumService = AlbumService()
     
+    init() {
+        albumService.delegate = self
+    }
+    
     func listVeryNew() -> Void {
         albumService.listVeryNew()
+    }
+
+    
+    func listVeryVeryNew() -> Void {
+        albumService.listAlbums()
+    }
+    
+    
+}
+
+extension AlbumBusiness: AlbumServiceProtocol {
+    
+    func ocurredAn(error: APIResponseError) {
+        
+    }
+    
+    
+    func fetched(list: [Album]?) {
+        
+    }
+    
+    func fetched(object: Album?) {
+        
     }
 
 }

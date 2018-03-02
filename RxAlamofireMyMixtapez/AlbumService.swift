@@ -15,28 +15,42 @@ protocol Gettable {
     func listNew(url: String) -> Observable<(HTTPURLResponse, Any)>
 }
 
+protocol AlbumServiceProtocol {
+    func fetched(list: [Album]?)
+    func fetched(object: Album?)
+    func ocurredAn(error: APIResponseError)
+}
+
 import UIKit
 import Foundation
 import ObjectMapper
 import RxSwift
 import Alamofire
 import RxAlamofire
+import PromiseKit
 
 struct AlbumService {
-    typealias Model = Album
-    typealias Error = APIResponseError
 
+    var delegate: AlbumServiceProtocol?
+    
+    func listAlbums() {
+        //UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        RequestManager.fetch(url: "/v2/albums/features", object: Album.self).then { responseRequest -> Void in
+            self.delegate?.fetched(list: responseRequest.listOfObjects)
+            }.catch { error in
+                self.delegate?.ocurredAn(error: error as! APIResponseError)
+            }.always {
+                //UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        }
 
-
-func listVeryNew() {
-    RequestManager.fetcheListOfObject(url: "/v2/albums/features", object: Album.self, onSuccess: { (object) in
-        
-        
-    }) { (error) in
-        
-        
     }
-}
-
-
+    
+    func listVeryNew() {
+        RequestManager.fetcheListOfObject(url: "/v2/albums/features", object: Album.self, onSuccess: { (object) in
+            
+        }) { (error) in
+            
+        }
+    }
+    
 }

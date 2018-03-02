@@ -9,5 +9,5 @@ target 'RxAlamofireMyMixtapez' do
   pod 'RxAlamofire', :git => 'https://github.com/gaplo917/RxAlamofire.git', :tag => '4.0.0'
   pod 'ObjectMapper'
   pod 'SwiftyJSON'
-
+  pod 'PromiseKit'
 end

@@ -12,17 +12,62 @@ import ObjectMapper
 import RxSwift
 import Alamofire
 import RxAlamofire
+import PromiseKit
 
 enum Result<T, U> where U: APIResponseError  {
     case success(T)
     case error(U)
 }
 
+class ResponseRequest<T> {
+    var object: T?
+    var listOfObjects: [T]?
+    
+    init(object: T) {
+        self.object = object
+    }
+    
+    init(listOfObjects: [T]) {
+        self.listOfObjects = listOfObjects
+    }
+    
+    
+    
+}
+
 
 struct RequestManager {
     
     fileprivate static let disposeBag = DisposeBag()
-
+    
+     static func fetch<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type) -> Promise<ResponseRequest<T>> {
+        
+        return Promise { fullFill, reject in
+            Request.fromPathURL(url).requestNew().subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).observeOn(scheduler)
+                .mapRequest().retry(3).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
+                    
+                    if let unity = Mapper<T>().map(JSONString: objectResponse) {
+                        fullFill(ResponseRequest(object: unity))
+                    } else if let unities = Mapper<T>().mapArray(JSONString: objectResponse) {
+                        fullFill(ResponseRequest(listOfObjects: unities))
+                    } else  {
+                        reject(APIResponseError())
+                    }
+                
+                },onError: { error in
+                    guard let errorApi = error as? APIResponseError else {
+                        return
+                    }
+                    if errorApi.error_code == 401 {
+                        reject(errorApi)
+                    } else {
+                        reject(errorApi)
+                    }
+                }).disposed(by: disposeBag)
+        }
+        
+    }
+    
     static func fetcheObject<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type, onSuccess: @escaping (T) -> Void, onError: @escaping (APIResponseError)  -> Void) {
         
         Request.fromPathURL(url).requestNew().subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).observeOn(scheduler)

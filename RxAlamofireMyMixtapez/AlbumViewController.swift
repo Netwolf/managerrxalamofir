@@ -26,7 +26,7 @@ class AlbumViewController: UIViewController {
         //oneRequest()
         //AlbumBusiness().list()
         //AlbumBusiness().listNew()
-        AlbumBusiness().listVeryNew()
+        AlbumBusiness().listVeryVeryNew()
     }
 
     override func didReceiveMemoryWarning() {
