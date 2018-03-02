@@ -31,8 +31,6 @@ class ResponseRequest<T> {
         self.listOfObjects = listOfObjects
     }
     
-    
-    
 }
 
 
