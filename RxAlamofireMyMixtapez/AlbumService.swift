@@ -35,7 +35,7 @@ struct AlbumService {
     
     func listAlbums() {
         //UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        RequestManager.fetch(url: "/v2/albums/features", object: Album.self).then { responseRequest -> Void in
+        RequestManager.shared.fetch(url: "/v2/albums/features", object: Album.self).then { responseRequest -> Void in
             self.delegate?.fetched(list: responseRequest.listOfObjects)
             }.catch { error in
                 self.delegate?.ocurredAn(error: error as! APIResponseError)
@@ -46,7 +46,7 @@ struct AlbumService {
     }
     
     func listVeryNew() {
-        RequestManager.fetcheListOfObject(url: "/v2/albums/features", object: Album.self, onSuccess: { (object) in
+        RequestManager.shared.fetcheListOfObject(url: "/v2/albums/features", object: Album.self, onSuccess: { (object) in
             
         }) { (error) in
             

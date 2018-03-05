@@ -30,15 +30,21 @@ class ResponseRequest<T> {
     init(listOfObjects: [T]) {
         self.listOfObjects = listOfObjects
     }
-    
 }
 
 
-struct RequestManager {
+class RequestManager {
     
-    fileprivate static let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+    private var errorManager = ErrorManager()
     
-     static func fetch<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type) -> Promise<ResponseRequest<T>> {
+    static let shared = RequestManager()
+    
+    init() {
+        errorManager.delegate = self
+    }
+    
+     func fetch<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type) -> Promise<ResponseRequest<T>> {
         
         return Promise { fullFill, reject in
             Request.fromPathURL(url).requestNew().subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).observeOn(scheduler)
@@ -53,20 +59,18 @@ struct RequestManager {
                     }
                 
                 },onError: { error in
+                    self.errorManager.handle(error: error)
                     guard let errorApi = error as? APIResponseError else {
                         return
                     }
-                    if errorApi.error_code == 401 {
-                        reject(errorApi)
-                    } else {
-                        reject(errorApi)
-                    }
+                    reject(errorApi)
+                    
                 }).disposed(by: disposeBag)
         }
         
     }
     
-    static func fetcheObject<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type, onSuccess: @escaping (T) -> Void, onError: @escaping (APIResponseError)  -> Void) {
+    func fetcheObject<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type, onSuccess: @escaping (T) -> Void, onError: @escaping (APIResponseError)  -> Void) {
         
         Request.fromPathURL(url).requestNew().subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).observeOn(scheduler)
             .mapRequest().do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
@@ -96,7 +100,7 @@ struct RequestManager {
             }).disposed(by: disposeBag)
     }
     
-    static func fetcheListOfObject<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type, onSuccess: @escaping ([T]) -> Void, onError: @escaping (APIResponseError)  -> Void) {
+    func fetcheListOfObject<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type, onSuccess: @escaping ([T]) -> Void, onError: @escaping (APIResponseError)  -> Void) {
         
         Request.fromPathURL(url).requestNew().subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).observeOn(scheduler)
             .mapRequest().do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
@@ -126,4 +130,13 @@ struct RequestManager {
 }
 
 
+extension RequestManager: ErrorProtocol {
+    func refreshToken() {
+        
+    }
+    
+    func show(error: String) {
+        
+    }
+}
 
