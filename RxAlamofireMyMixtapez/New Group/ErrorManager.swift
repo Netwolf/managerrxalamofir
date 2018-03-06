@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Alamofire
 
 protocol ErrorProtocol {
     func refreshToken()
@@ -16,10 +17,10 @@ protocol ErrorProtocol {
 struct ErrorManager {
     
     var delegate: ErrorProtocol?
-    
-    func handle(error: Error) {
+ 
+    func handle(error: Error) -> APIResponseError {
         guard let errorApi = error as? APIResponseError else {
-            return
+            return APIResponseError()
         }
         
         if errorApi.error_code == 401 {
@@ -27,6 +28,8 @@ struct ErrorManager {
         } else {
             delegate?.show(error: errorApi.error_description)
         }
+        
+        return errorApi
     }
     
 }

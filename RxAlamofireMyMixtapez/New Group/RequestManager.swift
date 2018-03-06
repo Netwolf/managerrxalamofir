@@ -25,35 +25,21 @@ class RequestManager {
         errorManager.delegate = self
     }
     
-    func observable(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:]) -> Observable<Any> {
+    func observable(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:]) -> Observable<(HTTPURLResponse, Any)> {
         return Request.fromPathURL(url).request()
     }
     
     func fetch<T:Mappable>(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 0, object: T.Type) -> Promise<T> {
         return Promise { fullFill, reject in
-            observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).map { json in
-                
-                guard let json = json as? [AnyObject] else {
-                    reject(APIResponseError.init())
-                    return
-                }
-                
-                if let unity = Mapper<T>().map(JSONObject: json) {
-                    fullFill(unity)
-                } else  {
-                    reject(APIResponseError())
-                }
-                
-                }
+            observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).mapRequest()
                 .observeOn(scheduler).retry(retries).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
-                    
-                },onError: { error in
-                    self.errorManager.handle(error: error)
-                    guard let errorApi = error as? APIResponseError else {
-                        return
+                    if let unity = Mapper<T>().map(JSONString: objectResponse) {
+                        fullFill(unity)
+                    } else {
+                        reject(APIResponseError())
                     }
-                    reject(errorApi)
-                    
+                },onError: { error in
+                    reject(self.errorManager.handle(error: error))
                 }).disposed(by: disposeBag)
         }
     }
@@ -61,26 +47,15 @@ class RequestManager {
     
     func fetchList<T:Mappable>(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 0, object: T.Type) -> Promise<[T]> {
         return Promise { fullFill, reject in
-            observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).map { json in
-                    guard let json = json as? [AnyObject] else {
-                        reject(APIResponseError.init())
-                        return
-                    }
-                    if let unities = Mapper<T>().mapArray(JSONObject: json) {
-                        fullFill(unities)
-                    } else {
-                        reject(APIResponseError())
-                    }
-                
-                }.observeOn(scheduler).retry(retries).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
-                
-            },onError: { error in
-                self.errorManager.handle(error: error)
-                guard let errorApi = error as? APIResponseError else {
-                    return
+            observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).mapRequest().observeOn(scheduler).retry(retries).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
+        
+                if let unities = Mapper<T>().mapArray(JSONString: objectResponse) {
+                    fullFill(unities)
+                } else {
+                    reject(APIResponseError())
                 }
-                reject(errorApi)
-                
+            },onError: { error in
+                reject(self.errorManager.handle(error: error))
             }).disposed(by: disposeBag)
         }
     }
