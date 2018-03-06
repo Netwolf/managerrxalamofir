@@ -754,7 +754,7 @@ extension Reactive where Base: DataRequest {
 
     /// - returns: A validated request based on the status code
     func validateSuccessfulResponse() -> DataRequest {
-        return self.base.validate(statusCode: 200 ..< 300)
+        return self.base.validate(statusCode: 200 ..< 600)
     }
 
     /**

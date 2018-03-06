@@ -14,10 +14,7 @@ import RxAlamofire
 import ObjectMapper
 
 
-enum Result<T, U> where U: APIResponseError  {
-    case success(T)
-    case error(U)
-}
+
 
 enum Method: String {
     case GET, POST, PUT, PATCH, DELETE
@@ -124,10 +121,10 @@ class Request {
     }
     
     
-    public static func request() -> Observable<Any> {
+    public static func request() -> Observable<(HTTPURLResponse, Any)> {
         
         //headers["Authorization"] = "\(Request.Token.TokenType) \(Request.Token.AccessToken)"
-        headers["Authorization"] = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjAzNjI2NTAsInVzZXJfbmFtZSI6IjI5NDI0MjAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiMTY3NzI5ODgtOTgwYy00YjVkLWE1MWEtMDBmNTkxNTJhMjQ4IiwiY2xpZW50X2lkIjoiYW5kcm9pZCIsInNjb3BlIjpbInJlYWQiXX0.Pd768pLy7AlHV0YOVN8jqNXH81It5dB_cJSJVyWDy9k"
+        headers["Authorization"] = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjA0NTUwMTYsInVzZXJfbmFtZSI6IjI5NDI0MjAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiNjI5YzE3YTctNWI2ZS00MmJkLThlMWUtOTM4MWE2NWRhYTYyIiwiY2xpZW50X2lkIjoiYW5kcm9pZCIsInNjb3BlIjpbInJlYWQiXX0.fbelypC3tMEeCMiO9Dc6S0XJ1lO8fdGuHTSj_8A3UA8"
         headers["Content-Type"] = "application/json"
         headers["Accept-Encoding"] = "gzip"
         
@@ -135,8 +132,9 @@ class Request {
         configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
         configuration.requestCachePolicy = .useProtocolCachePolicy
         
+        
         let result = Request.sharedManager
-            .rx.json(method, url, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .rx.responseJSON(method, url, parameters: parameters, encoding: URLEncoding.default, headers: headers)
         
         return result
     }

@@ -8,6 +8,7 @@
 
 import UIKit
 import ObjectMapper
+import Alamofire
 
 class Album: Codable, Mappable {
     
@@ -93,6 +94,11 @@ class APIResponseError: Error, Mappable {
     }
     
     required init?(map: Map) {
+    }
+    
+    init(code: Int, description: String) {
+        self.error_code = code
+        self.error_description = description
     }
     
     func mapping(map: Map) {
