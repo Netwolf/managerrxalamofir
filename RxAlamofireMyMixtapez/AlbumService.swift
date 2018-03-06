@@ -6,19 +6,10 @@
 //  Copyright © 2018 HugoSilva. All rights reserved.
 //
 
-
-protocol Gettable {
-    associatedtype Model
-    associatedtype Error where Error == APIResponseError
-    func list(completion: @escaping (Result<[Model], Error>) -> Void)
-    func unique(completion: @escaping (Result<Model, Error>) -> Void)
-    func listNew(url: String) -> Observable<(HTTPURLResponse, Any)>
-}
-
 protocol AlbumServiceProtocol {
     func fetched(list: [Album]?)
     func fetched(object: Album?)
-    func ocurredAn(error: APIResponseError)
+    func error(error: APIResponseError)
 }
 
 import UIKit
@@ -33,24 +24,12 @@ struct AlbumService {
 
     var delegate: AlbumServiceProtocol?
     
-    func listAlbums() {
-        //UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        RequestManager.shared.fetch(url: "/v2/albums/features", object: Album.self).then { responseRequest -> Void in
-            self.delegate?.fetched(list: responseRequest.listOfObjects)
+    func list() {
+        RequestManager.shared.fetchList(url: "/v2/albums/features", parameters: [:], headers: [:], schedulerType: SerialDispatchQueueScheduler.init(qos: .background), scheduler: MainScheduler.instance, retries: 3, object: Album.self).then { response -> Void in
+            self.delegate?.fetched(list: response)
             }.catch { error in
-                self.delegate?.ocurredAn(error: error as! APIResponseError)
+                self.delegate?.error(error: error as! APIResponseError)
             }.always {
-                //UIApplication.shared.isNetworkActivityIndicatorVisible = false
-        }
-
-    }
-    
-    func listVeryNew() {
-        RequestManager.shared.fetcheListOfObject(url: "/v2/albums/features", object: Album.self, onSuccess: { (object) in
-            
-        }) { (error) in
-            
         }
     }
-    
 }

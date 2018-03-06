@@ -13,9 +13,10 @@ import Alamofire
 import RxAlamofire
 import ObjectMapper
 
-enum ObjectResponse {
-    case onSuccess(String)
-    case onError(APIResponseError)
+
+enum Result<T, U> where U: APIResponseError  {
+    case success(T)
+    case error(U)
 }
 
 enum Method: String {
@@ -28,6 +29,69 @@ enum UrlEncoding {
 }
 
 class Request {
+    
+    public static let sharedManager: Alamofire.SessionManager = {
+        
+        let certificates = ServerTrustPolicy.certificates(in: Bundle.main)
+        let serverTrustPolicies: [String: ServerTrustPolicy] = [
+            "api.mymixtapez.com": .pinCertificates(
+                certificates: certificates,
+                validateCertificateChain: true,
+                validateHost: true
+            ),
+            "api-sandbox.mymixtapez.com": .pinCertificates(
+                certificates: certificates,
+                validateCertificateChain: true,
+                validateHost: true
+            ),
+            "search.mymixtapez.com": .pinCertificates(
+                certificates: certificates,
+                validateCertificateChain: true,
+                validateHost: true
+            ),
+            "hits.mymixtapez.com": .pinCertificates(
+                certificates: certificates,
+                validateCertificateChain: true,
+                validateHost: true
+            ),
+            "image.mymixtapez.com": .pinCertificates(
+                certificates: certificates,
+                validateCertificateChain: true,
+                validateHost: true
+            ),
+            
+            "video.mymixtapez.com": .pinCertificates(
+                certificates: certificates,
+                validateCertificateChain: true,
+                validateHost: true
+            ),
+            
+            "music.mymixtapez.com": .pinCertificates(
+                certificates: certificates,
+                validateCertificateChain: true,
+                validateHost: true
+            ),
+            
+            "stream.mymixtapez.com": .pinCertificates(
+                certificates: certificates,
+                validateCertificateChain: true,
+                validateHost: true
+            )
+            
+        ]
+        
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = Alamofire.SessionManager.defaultHTTPHeaders
+        
+        
+        return Alamofire.SessionManager(configuration: configuration)
+        //return Alamofire.SessionManager(
+           // configuration: configuration,
+           // serverTrustPolicyManager: ServerTrustPolicyManager(policies: serverTrustPolicies)
+        //)
+        
+        
+    }()
     
     fileprivate static var baseURL: String = "https://api.mymixtapez.com"
     fileprivate static var url: String = baseURL
@@ -60,10 +124,10 @@ class Request {
     }
     
     
-    public static func requestNew() -> Observable<(HTTPURLResponse, Any)> {
+    public static func request() -> Observable<Any> {
         
         //headers["Authorization"] = "\(Request.Token.TokenType) \(Request.Token.AccessToken)"
-        headers["Authorization"] = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjAwMjE0OTksInVzZXJfbmFtZSI6IjE2ODE1ODA0IiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6ImJiNzVkMDg5LTljY2EtNDg1Yy05N2Q5LTc5ODk3YzIyYTc1MiIsImNsaWVudF9pZCI6ImlvcyIsInNjb3BlIjpbIndyaXRlIiwicmVhZCJdfQ.g1NyI3bGxEw66QiiZS8b4us8PM7QH564mSx57-tqAvg"
+        headers["Authorization"] = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjAzNjI2NTAsInVzZXJfbmFtZSI6IjI5NDI0MjAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiMTY3NzI5ODgtOTgwYy00YjVkLWE1MWEtMDBmNTkxNTJhMjQ4IiwiY2xpZW50X2lkIjoiYW5kcm9pZCIsInNjb3BlIjpbInJlYWQiXX0.Pd768pLy7AlHV0YOVN8jqNXH81It5dB_cJSJVyWDy9k"
         headers["Content-Type"] = "application/json"
         headers["Accept-Encoding"] = "gzip"
         
@@ -71,76 +135,11 @@ class Request {
         configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
         configuration.requestCachePolicy = .useProtocolCachePolicy
         
-        let result = SessionManager(configuration: configuration)
-            .rx.responseJSON(method,
-                             self.url,
-                             parameters: self.parameters,
-                             encoding: URLEncoding.default,
-                             headers: headers)
+        let result = Request.sharedManager
+            .rx.json(method, url, parameters: parameters, encoding: URLEncoding.default, headers: headers)
         
         return result
     }
-    
-    
-    public static func request(callback: @escaping (ObjectResponse) -> Void) {
-        
-        headers["Authorization"] = "\(Request.Token.TokenType) \(Request.Token.AccessToken)"
-        headers["Content-Type"] = "application/json"
-        headers["Accept-Encoding"] = "gzip"
-    
-        let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
-        configuration.requestCachePolicy = .useProtocolCachePolicy
-        
-        _ = SessionManager(configuration: configuration)
-            .rx.responseJSON(method,
-                             self.url,
-                             parameters: self.parameters,
-                             encoding: URLEncoding.default,
-                             headers: headers)
-            .subscribeOn(SerialDispatchQueueScheduler.init(qos: .background))
-            .mapRequest()
-            .subscribe(onNext: { objectResponse in
-                callback(ObjectResponse.onSuccess(objectResponse))
-            },onError: { error in
-                callback(ObjectResponse.onError(error as! APIResponseError))
-            }).disposed(by: disposeBag)
-        
-    }
-    
-    public static func refresh(callback: @escaping (ObjectResponse) -> Void) {
-        
-        let urlRefreshToken = baseURL + "/oauth/token"
-        
-        if let url = URL(string: urlRefreshToken) {
-            
-            let refreshParams = ["grant_type": "refresh_token", "refresh_token": Request.Token.RefreshToken]
-            
-            var headers:[String:String] = [String:String]()
-            headers["Authorization"] = "Basic aW9zOlNEYTVnU3VXZmdoNlFVVXU="
-            headers["Accept-Encoding"] = "gzip"
-            
-            let configuration = URLSessionConfiguration.default
-            configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
-            
-            _ = SessionManager(configuration: configuration)
-                .rx.responseJSON(.post,
-                                 url,
-                                 parameters: refreshParams,
-                                 encoding: URLEncoding.default,
-                                 headers: headers)
-                .subscribeOn(SerialDispatchQueueScheduler.init(qos: .background))
-                .mapRequest()
-                .subscribe(onNext: { objectResponse in
-                    callback(ObjectResponse.onSuccess(objectResponse))
-                },onError: { error in
-                    callback(ObjectResponse.onError(error as! APIResponseError))
-                }).disposed(by: disposeBag)
-            
-        }
-        
-    }
-    
     
 }
 
