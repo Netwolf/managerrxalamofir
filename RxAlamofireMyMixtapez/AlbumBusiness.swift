@@ -22,21 +22,16 @@ struct AlbumBusiness {
         albumService.delegate = self
     }
     
-    func listVeryNew() -> Void {
-        albumService.listVeryNew()
+   
+    func list() -> Void {
+        albumService.list()
     }
-
-    
-    func listVeryVeryNew() -> Void {
-        albumService.listAlbums()
-    }
-    
     
 }
 
 extension AlbumBusiness: AlbumServiceProtocol {
     
-    func ocurredAn(error: APIResponseError) {
+    func error(error: APIResponseError) {
         
     }
     

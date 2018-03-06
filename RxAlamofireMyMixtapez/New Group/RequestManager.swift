@@ -14,25 +14,6 @@ import Alamofire
 import RxAlamofire
 import PromiseKit
 
-enum Result<T, U> where U: APIResponseError  {
-    case success(T)
-    case error(U)
-}
-
-class ResponseRequest<T> {
-    var object: T?
-    var listOfObjects: [T]?
-    
-    init(object: T) {
-        self.object = object
-    }
-    
-    init(listOfObjects: [T]) {
-        self.listOfObjects = listOfObjects
-    }
-}
-
-
 class RequestManager {
     
     private let disposeBag = DisposeBag()
@@ -44,20 +25,28 @@ class RequestManager {
         errorManager.delegate = self
     }
     
-     func fetch<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type) -> Promise<ResponseRequest<T>> {
-        
+    func observable(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:]) -> Observable<Any> {
+        return Request.fromPathURL(url).request()
+    }
+    
+    func fetch<T:Mappable>(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 0, object: T.Type) -> Promise<T> {
         return Promise { fullFill, reject in
-            Request.fromPathURL(url).requestNew().subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).observeOn(scheduler)
-                .mapRequest().retry(3).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
-                    
-                    if let unity = Mapper<T>().map(JSONString: objectResponse) {
-                        fullFill(ResponseRequest(object: unity))
-                    } else if let unities = Mapper<T>().mapArray(JSONString: objectResponse) {
-                        fullFill(ResponseRequest(listOfObjects: unities))
-                    } else  {
-                        reject(APIResponseError())
-                    }
+            observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).map { json in
                 
+                guard let json = json as? [AnyObject] else {
+                    reject(APIResponseError.init())
+                    return
+                }
+                
+                if let unity = Mapper<T>().map(JSONObject: json) {
+                    fullFill(unity)
+                } else  {
+                    reject(APIResponseError())
+                }
+                
+                }
+                .observeOn(scheduler).retry(retries).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
+                    
                 },onError: { error in
                     self.errorManager.handle(error: error)
                     guard let errorApi = error as? APIResponseError else {
@@ -67,70 +56,40 @@ class RequestManager {
                     
                 }).disposed(by: disposeBag)
         }
-        
     }
     
-    func fetcheObject<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type, onSuccess: @escaping (T) -> Void, onError: @escaping (APIResponseError)  -> Void) {
-        
-        Request.fromPathURL(url).requestNew().subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).observeOn(scheduler)
-            .mapRequest().do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
-        
+    
+    func fetchList<T:Mappable>(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 0, object: T.Type) -> Promise<[T]> {
+        return Promise { fullFill, reject in
+            observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).map { json in
+                    guard let json = json as? [AnyObject] else {
+                        reject(APIResponseError.init())
+                        return
+                    }
+                    if let unities = Mapper<T>().mapArray(JSONObject: json) {
+                        fullFill(unities)
+                    } else {
+                        reject(APIResponseError())
+                    }
                 
-                if let unity = Mapper<T>().map(JSONString: objectResponse) {
-                    onSuccess(unity)
-                } else {
-                    onError(APIResponseError.init())
-                }
-                
-                if let unities = Mapper<T>().mapArray(JSONString: objectResponse) {
-                    onSuccess(unities.first!)
-                }
-                
+                }.observeOn(scheduler).retry(retries).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
                 
             },onError: { error in
-                
+                self.errorManager.handle(error: error)
                 guard let errorApi = error as? APIResponseError else {
                     return
                 }
-                if errorApi.error_code == 401 {
-                    onError(errorApi)
-                } else {
-                    onError(errorApi)
-                }
+                reject(errorApi)
+                
             }).disposed(by: disposeBag)
+        }
     }
-    
-    func fetcheListOfObject<T:Mappable>(url: String, schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .default), scheduler: ImmediateSchedulerType = MainScheduler.instance, object: T.Type, onSuccess: @escaping ([T]) -> Void, onError: @escaping (APIResponseError)  -> Void) {
-        
-        Request.fromPathURL(url).requestNew().subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).observeOn(scheduler)
-            .mapRequest().do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
-            
-                
-                if let unities = Mapper<T>().mapArray(JSONString: objectResponse) {
-                    onSuccess(unities)
-                } else {
-                    onError(APIResponseError.init())
-                }
-                
-                
-            },onError: { error in
-                
-                guard let errorApi = error as? APIResponseError else {
-                    return
-                }
-                if errorApi.error_code == 401 {
-                    onError(errorApi)
-                } else {
-                    onError(errorApi)
-                }
-            }).disposed(by: disposeBag)
-    }
-
     
 }
 
 
 extension RequestManager: ErrorProtocol {
+    
     func refreshToken() {
         
     }

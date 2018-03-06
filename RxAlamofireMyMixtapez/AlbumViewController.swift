@@ -22,11 +22,7 @@ class AlbumViewController: UIViewController {
     let exempleRequest = "http://jsonplaceholder.typicode.com/posts"
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        //oneRequest()
-        //AlbumBusiness().list()
-        //AlbumBusiness().listNew()
-        AlbumBusiness().listVeryVeryNew()
+        AlbumBusiness().list()
     }
 
     override func didReceiveMemoryWarning() {

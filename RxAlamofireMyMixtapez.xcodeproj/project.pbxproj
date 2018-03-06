@@ -13,7 +13,6 @@
 		AE18582A2046E7570062126F /* AlbumViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1858292046E7570062126F /* AlbumViewModel.swift */; };
 		AE18582E204711400062126F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE18582D204711400062126F /* Extensions.swift */; };
 		AE185830204731E40062126F /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE18582F204731E40062126F /* RequestManager.swift */; };
-		AE185833204756CB0062126F /* Teste.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE185832204756CB0062126F /* Teste.swift */; };
 		AE185840204D78120062126F /* ErrorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE18583F204D78120062126F /* ErrorManager.swift */; };
 		C10F80F72044869F007C13A1 /* ConfigurationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10F80F62044869F007C13A1 /* ConfigurationRequest.swift */; };
 		C13063E7202B8DBB00FD74FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13063E6202B8DBB00FD74FD /* AppDelegate.swift */; };
@@ -33,7 +32,6 @@
 		AE1858292046E7570062126F /* AlbumViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlbumViewModel.swift; path = RxAlamofireMyMixtapez/AlbumViewModel.swift; sourceTree = SOURCE_ROOT; };
 		AE18582D204711400062126F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AE18582F204731E40062126F /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RequestManager.swift; path = "RxAlamofireMyMixtapez/New Group/RequestManager.swift"; sourceTree = SOURCE_ROOT; };
-		AE185832204756CB0062126F /* Teste.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Teste.swift; path = "RxAlamofireMyMixtapez/New Group/Teste.swift"; sourceTree = SOURCE_ROOT; };
 		AE18583F204D78120062126F /* ErrorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorManager.swift; sourceTree = "<group>"; };
 		C10F80F62044869F007C13A1 /* ConfigurationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ConfigurationRequest.swift; path = "RxAlamofireMyMixtapez/New Group/ConfigurationRequest.swift"; sourceTree = SOURCE_ROOT; };
 		C13063E3202B8DBB00FD74FD /* RxAlamofireMyMixtapez.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RxAlamofireMyMixtapez.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,7 +84,6 @@
 				AE18582F204731E40062126F /* RequestManager.swift */,
 				C133C27C203B3BF00020FECA /* ObservableType.swift */,
 				C10F80F62044869F007C13A1 /* ConfigurationRequest.swift */,
-				AE185832204756CB0062126F /* Teste.swift */,
 				AE18583F204D78120062126F /* ErrorManager.swift */,
 			);
 			name = Api;
@@ -281,7 +278,6 @@
 				C1482B5D2037198E001D8870 /* Album.swift in Sources */,
 				C13063E7202B8DBB00FD74FD /* AppDelegate.swift in Sources */,
 				C1482B5B203718F2001D8870 /* Request.swift in Sources */,
-				AE185833204756CB0062126F /* Teste.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
