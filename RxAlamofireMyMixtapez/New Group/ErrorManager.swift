@@ -20,7 +20,7 @@ struct ErrorManager {
             return APIResponseError()
         }
         
-        delegate?.show(error: errorApi.error_description)
+        delegate?.show(error: errorApi.errorDescription)
         return errorApi
     }
     

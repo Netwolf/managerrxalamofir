@@ -35,12 +35,12 @@ extension ObservableType {
             throw APIResponseError()
         }
     }
-    
+
     func checkResponseError(urlResponse: HTTPURLResponse, json: Any) -> APIResponseError? {
 
         if urlResponse.statusCode >= 400 {
             if let recipe = Mapper<APIResponseError>().map(JSON: json as! [String : Any]) {
-                recipe.error_code = urlResponse.statusCode
+                recipe.errorCode = urlResponse.statusCode
                 return recipe
             }
         }
