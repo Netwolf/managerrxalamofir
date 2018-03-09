@@ -45,11 +45,7 @@ class RequestManager {
 
 
 extension RequestManager: ErrorProtocol {
-    
-    func refreshToken() {
-        
-    }
-    
+
     func show(error: String) {
         
     }

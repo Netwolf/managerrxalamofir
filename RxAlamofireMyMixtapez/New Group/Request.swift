@@ -6,15 +6,8 @@
 //  Copyright © 2018 HugoSilva. All rights reserved.
 //
 
-import UIKit
-
 import RxSwift
 import Alamofire
-import RxAlamofire
-import ObjectMapper
-
-
-
 
 enum Method: String {
     case GET, POST, PUT, PATCH, DELETE
@@ -26,70 +19,7 @@ enum UrlEncoding {
 }
 
 class Request {
-    
-    public static let sharedManager: Alamofire.SessionManager = {
-        
-        let certificates = ServerTrustPolicy.certificates(in: Bundle.main)
-        let serverTrustPolicies: [String: ServerTrustPolicy] = [
-            "api.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            "api-sandbox.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            "search.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            "hits.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            "image.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            
-            "video.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            
-            "music.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            
-            "stream.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            )
-            
-        ]
-        
-        let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders = Alamofire.SessionManager.defaultHTTPHeaders
-        
-        
-        return Alamofire.SessionManager(configuration: configuration)
-        //return Alamofire.SessionManager(
-           // configuration: configuration,
-           // serverTrustPolicyManager: ServerTrustPolicyManager(policies: serverTrustPolicies)
-        //)
-        
-        
-    }()
-    
+
     fileprivate static var baseURL: String = "https://api.mymixtapez.com"
     fileprivate static var url: String = baseURL
     fileprivate static var method: Alamofire.HTTPMethod = .get
