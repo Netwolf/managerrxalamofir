@@ -28,32 +28,13 @@ class RequestManager {
     func observable(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:]) -> Observable<(HTTPURLResponse, Any)> {
         return Request.fromPathURL(url).request()
     }
-    
-    func fetch<T:Mappable>(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 0, object: T.Type) -> Promise<T> {
-        return Promise { fullFill, reject in
-            observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).mapRequest()
-                .observeOn(scheduler).retry(retries).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
-                    if let unity = Mapper<T>().map(JSONString: objectResponse) {
-                        fullFill(unity)
-                    } else {
-                        reject(APIResponseError())
-                    }
-                },onError: { error in
-                    reject(self.errorManager.handle(error: error))
-                }).disposed(by: disposeBag)
-        }
-    }
-    
-    
-    func fetchList<T:Mappable>(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 0, object: T.Type) -> Promise<[T]> {
+
+    func fetch<T:Mappable>(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 0, object: T.Type) -> Promise<String> {
+        
+       
         return Promise { fullFill, reject in
             observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).mapRequest().observeOn(scheduler).retry(retries).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
-        
-                if let unities = Mapper<T>().mapArray(JSONString: objectResponse) {
-                    fullFill(unities)
-                } else {
-                    reject(APIResponseError())
-                }
+                    fullFill(objectResponse)
             },onError: { error in
                 reject(self.errorManager.handle(error: error))
             }).disposed(by: disposeBag)

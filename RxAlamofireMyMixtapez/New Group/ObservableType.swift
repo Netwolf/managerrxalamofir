@@ -9,6 +9,7 @@
 import RxSwift
 import RxAlamofire
 import ObjectMapper
+import PromiseKit
 
 extension ObservableType {
     
@@ -38,13 +39,12 @@ extension ObservableType {
     func checkResponseError(urlResponse: HTTPURLResponse, json: Any) -> APIResponseError? {
 
         if urlResponse.statusCode >= 400 {
-            if let recipe =  Mapper<APIResponseError>().map(JSON: json as! [String : Any]) {
+            if let recipe = Mapper<APIResponseError>().map(JSON: json as! [String : Any]) {
                 recipe.error_code = urlResponse.statusCode
                 return recipe
             }
         }
         return nil
     }
-    
 }
 
