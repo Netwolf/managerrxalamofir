@@ -94,6 +94,7 @@ class APIResponseError: Error, Mappable {
     }
     
     required init?(map: Map) {
+        
     }
     
     init(code: Int, description: String) {
@@ -101,11 +102,30 @@ class APIResponseError: Error, Mappable {
         self.error_description = description
     }
     
+    init(code: Int) {
+        error_code = code
+    }
+    
     func mapping(map: Map) {
-        error_code <- map["error_code"]
         error_description <- map["error_description"]
     }    
 }
+
+class Diogo: Mappable {
+    var name : String = ""
+
+    init() {
+    }
+    
+    required init?(map: Map) {
+    }
+    
+    func mapping(map: Map) {
+        name <- map["name"]
+    }
+    
+}
+
 
 public struct ObjectRequest<T> {
     var objectResponse: T?
