@@ -29,27 +29,73 @@ class RequestManager {
         return Request.fromPathURL(url).request()
     }
 
-    func fetch<T:Mappable>(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 0, object: T.Type) -> Promise<String> {
+    func fetch<T:Mappable>(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 1, object: T.Type) -> Promise<String> {
         
-       
         return Promise { fullFill, reject in
-            observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).mapRequest().observeOn(scheduler).retry(retries).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
+            observable(url: url, parameters: parameters, headers: headers)
+                .subscribeOn(schedulerType)
+                .do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true })
+                .mapRequest()
+                .observeOn(scheduler)
+                .retry(retries)
+                .do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false })
+                .subscribe(onNext: { objectResponse in
                     fullFill(objectResponse)
             },onError: { error in
-                reject(self.errorManager.handle(error: error))
+                let error = self.errorManager.handle(error: error)
+                if error.errorCode == 401 {
+                    self.refreshTokenFetch(url: url, parameters: parameters, headers: headers as! [String : String]).then { response -> Void in
+                        fullFill(response)
+                        }.catch { error in
+                            reject(self.errorManager.handle(error: error))
+                    }
+                }
             }).disposed(by: disposeBag)
         }
+    }
+    
+    func refreshTokenFetch(url: String, parameters: [String: AnyObject] = [:], headers: [String: String] = [:]) -> Promise<String> {
+        
+        return Promise { fullFill, reject in
+            Request.refreshToken()
+                .subscribeOn(SerialDispatchQueueScheduler.init(qos: .background))
+                .do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true })
+                .mapRequest().observeOn(MainScheduler.instance)
+                .do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false })
+                .subscribe(onNext: { objectResponse in
+                    
+                    print("Response: \(objectResponse)")
+                    if  let objectToken =  Mapper<RefreshToken>().map(JSONString: objectResponse) {
+                        Request.saveTokens(tokens: objectToken)
+                    }
+                    
+                    self.observable(url: url, parameters: parameters, headers: headers as [String : AnyObject])
+                        .subscribeOn(SerialDispatchQueueScheduler.init(qos: .background))
+                        .do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true })
+                        .mapRequest()
+                        .observeOn(MainScheduler.instance)
+                        .do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false })
+                        .subscribe(onNext: { objectResponse in
+                            fullFill(objectResponse)
+                        },onError: { error in
+                            print("error refresh: \(error)")
+                            reject(self.errorManager.handle(error: error))
+                        }).disposed(by: self.disposeBag)
+                    
+                },onError: { error in
+                    print("error: \(error)")
+
+                }).disposed(by: disposeBag)
+            
+        }
+        
     }
     
 }
 
 
 extension RequestManager: ErrorProtocol {
-    
-    func refreshToken() {
-        
-    }
-    
+
     func show(error: String) {
         
     }

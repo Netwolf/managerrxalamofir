@@ -23,6 +23,7 @@
 		C133C27D203B3BF00020FECA /* ObservableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133C27C203B3BF00020FECA /* ObservableType.swift */; };
 		C1482B5B203718F2001D8870 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1482B5A203718F2001D8870 /* Request.swift */; };
 		C1482B5D2037198E001D8870 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1482B5C2037198E001D8870 /* Album.swift */; };
+		C15DB4972052D1BE009B9897 /* RequestCertificate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15DB4962052D1BE009B9897 /* RequestCertificate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		C133C27C203B3BF00020FECA /* ObservableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ObservableType.swift; path = "RxAlamofireMyMixtapez/New Group/ObservableType.swift"; sourceTree = SOURCE_ROOT; };
 		C1482B5A203718F2001D8870 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Request.swift; path = "RxAlamofireMyMixtapez/New Group/Request.swift"; sourceTree = SOURCE_ROOT; };
 		C1482B5C2037198E001D8870 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		C15DB4962052D1BE009B9897 /* RequestCertificate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCertificate.swift; sourceTree = "<group>"; };
 		C75363188DD790A9DC945214 /* Pods-RxAlamofireMyMixtapez.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxAlamofireMyMixtapez.release.xcconfig"; path = "Pods/Target Support Files/Pods-RxAlamofireMyMixtapez/Pods-RxAlamofireMyMixtapez.release.xcconfig"; sourceTree = "<group>"; };
 		FFCB0D65AE62536A77B5A5E3 /* Pods_RxAlamofireMyMixtapez.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RxAlamofireMyMixtapez.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -86,6 +88,7 @@
 				C10F80F62044869F007C13A1 /* ConfigurationRequest.swift */,
 				AE18583F204D78120062126F /* ErrorManager.swift */,
 				AE7A33562052BFE0009B1060 /* ServiceProtocol.swift */,
+				C15DB4962052D1BE009B9897 /* RequestCertificate.swift */,
 			);
 			name = Api;
 			path = "New Group";
@@ -267,6 +270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C133C27D203B3BF00020FECA /* ObservableType.swift in Sources */,
+				C15DB4972052D1BE009B9897 /* RequestCertificate.swift in Sources */,
 				AE185840204D78120062126F /* ErrorManager.swift in Sources */,
 				C13063E9202B8DBB00FD74FD /* AlbumViewController.swift in Sources */,
 				AE7A33572052BFE0009B1060 /* ServiceProtocol.swift in Sources */,

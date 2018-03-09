@@ -37,99 +37,26 @@ class Album: Codable, Mappable {
     
 }
 
-
-class Status: Mappable {
-    
-    var status: ErrorT?
-    
-    required init?(map: Map) {
-        
-    }
-    
-    func mapping(map: Map) {
-        status <- map["status"]
-    }
-    
-}
-
-class ErrorT: Mappable {
-    
-    var message: String = ""
-    var value: Int = 0
-    
-    required init?(map: Map) {
-    }
-    
-    func mapping(map: Map) {
-        message <- map["message"]
-        value <- map["value"]
-    }
-    
-}
-
-
-class Post: Mappable {
-    var body: String = ""
-    var id: Int = 0
-    var title: String = ""
-    var userId: Int = 0
-    
-    required init?(map: Map) {
-    }
-    
-    func mapping(map: Map) {
-        body <- map["body"]
-        id <- map["id"]
-        title <- map["title"]
-        userId <- map["userId"]
-    }
-}
-
 class APIResponseError: Error, Mappable {
     
-    var error_code : Int = -1
-    var error_description : String = "Could not decode object"
+    var errorCode : Int = -1
+    var errorDescription : String = "Could not decode object"
     
     init() {
     }
     
     required init?(map: Map) {
-        
     }
     
     init(code: Int, description: String) {
-        self.error_code = code
-        self.error_description = description
-    }
-    
-    init(code: Int) {
-        error_code = code
+        self.errorCode = code
+        self.errorDescription = description
     }
     
     func mapping(map: Map) {
-        error_description <- map["error_description"]
-    }    
-}
-
-class Diogo: Mappable {
-    var name : String = ""
-
-    init() {
+        errorCode <- map["error_code"]
+        errorDescription <- map["error_description"]
     }
-    
-    required init?(map: Map) {
-    }
-    
-    func mapping(map: Map) {
-        name <- map["name"]
-    }
-    
-}
-
-
-public struct ObjectRequest<T> {
-    var objectResponse: T?
-    var arrayResponse: [T]?
 }
 
 class RefreshToken: Mappable {
@@ -158,6 +85,3 @@ class RefreshToken: Mappable {
     
 }
 
-class ObjectClass: NSObject {
-
-}
