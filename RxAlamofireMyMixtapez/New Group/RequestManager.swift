@@ -25,14 +25,14 @@ class RequestManager {
         errorManager.delegate = self
     }
     
-    func observable(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:]) -> Observable<(HTTPURLResponse, Any)> {
-        return Request.fromPathURL(url).request()
+    func observable(url: String, method: Method = .GET ,parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:]) -> Observable<(HTTPURLResponse, Any)> {
+        return Request.fromPathURL(url).method(method).header(headers as! [String : String]).queryParameters(parameters).request()
     }
 
-    func fetch<T:Mappable>(url: String, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 1, object: T.Type) -> Promise<String> {
+    func fetch<T:Mappable>(url: String, method: Method = .GET, parameters: [String: AnyObject] = [:], headers: [String: AnyObject] = [:], schedulerType: SchedulerType = SerialDispatchQueueScheduler.init(qos: .background), scheduler: ImmediateSchedulerType = MainScheduler.instance, retries: Int = 1, object: T.Type) -> Promise<String> {
         
         return Promise { fullFill, reject in
-            observable(url: url, parameters: parameters, headers: headers)
+            observable(url: url, method: method ,parameters: parameters, headers: headers)
                 .subscribeOn(schedulerType)
                 .do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true })
                 .mapRequest()
@@ -41,23 +41,26 @@ class RequestManager {
                 .do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false })
                 .subscribe(onNext: { objectResponse in
                     fullFill(objectResponse)
-            },onError: { error in
-                let error = self.errorManager.handle(error: error)
-                if error.errorCode == 401 {
-                    self.refreshTokenFetch(url: url, parameters: parameters, headers: headers as! [String : String]).then { response -> Void in
-                        fullFill(response)
-                        }.catch { error in
-                            reject(self.errorManager.handle(error: error))
+                },onError: { error in
+                    let error = self.errorManager.handle(error: error)
+                    if error.errorCode == 401 {
+                        self.refreshTokenFetch(url: url, parameters: parameters, headers: headers as! [String : String]).then { response -> Void in
+                            fullFill(response)
+                            }.catch { error in
+                                reject(self.errorManager.handle(error: error))
+                        }
                     }
-                }
-            }).disposed(by: disposeBag)
+                }).disposed(by: disposeBag)
         }
     }
     
-    func refreshTokenFetch(url: String, parameters: [String: AnyObject] = [:], headers: [String: String] = [:]) -> Promise<String> {
+    func refreshTokenFetch(url: String, method: Method = .GET, parameters: [String: AnyObject] = [:], headers: [String: String] = [:]) -> Promise<String> {
         
         return Promise { fullFill, reject in
-            Request.refreshToken()
+            
+            let refreshParams = ["grant_type": "refresh_token", "refresh_token": "\(Request.Token.RefreshToken)"]
+            
+            Request.fromPathURL("/oauth/token").method(.POST).headerToken([:]).queryParameters(refreshParams as [String : AnyObject]).request()
                 .subscribeOn(SerialDispatchQueueScheduler.init(qos: .background))
                 .do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true })
                 .mapRequest().observeOn(MainScheduler.instance)
@@ -69,7 +72,7 @@ class RequestManager {
                         Request.saveTokens(tokens: objectToken)
                     }
                     
-                    self.observable(url: url, parameters: parameters, headers: headers as [String : AnyObject])
+                    self.observable(url: url, method: method, parameters: parameters, headers: headers as [String : AnyObject])
                         .subscribeOn(SerialDispatchQueueScheduler.init(qos: .background))
                         .do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true })
                         .mapRequest()

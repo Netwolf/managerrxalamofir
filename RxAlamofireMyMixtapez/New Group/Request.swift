@@ -20,7 +20,7 @@ enum UrlEncoding {
 
 class Request {
 
-    fileprivate static var baseURL: String = "https://api.mymixtapez.com"
+    fileprivate static var baseURL: String = ApiConstants.Config.BaseURL
     fileprivate static var url: String = baseURL
     fileprivate static var method: Alamofire.HTTPMethod = .get
     fileprivate static var parameters: [String: AnyObject] = [:]
@@ -38,54 +38,37 @@ class Request {
         return self
     }
     
-    
     public static func header(_ headers: [String: String]) -> Request.Type {
         self.headers = headers
+        self.headers["Authorization"] = "\(Request.Token.TokenType) \(Request.Token.AccessToken)"
+        self.headers["Content-Type"] = "application/json"
+        self.headers["Accept-Encoding"] = "gzip"
         return self
     }
     
+    public static func headerToken(_ headers: [String: String]) -> Request.Type {
+        self.headers = headers
+        self.headers["Authorization"] = "Basic aW9zOlNEYTVnU3VXZmdoNlFVVXU="
+        self.headers["Accept-Encoding"] = "gzip"
+        return self
+    }
     
     public static func encodParameters(_ encoding: UrlEncoding) -> Request.Type {
         self.encoding = encoding == .json ? JSONEncoding.default : URLEncoding.default
         return self
     }
     
-    
     public static func request() -> Observable<(HTTPURLResponse, Any)> {
         
-        headers["Authorization"] = "\(Request.Token.TokenType) \(Request.Token.AccessToken)"
-        headers["Content-Type"] = "application/json"
-        headers["Accept-Encoding"] = "gzip"
-        
-        let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
-        configuration.requestCachePolicy = .useProtocolCachePolicy
-        
-        
-        let result = Request.sharedManager
-            .rx.responseJSON(method, url, parameters: parameters, encoding: URLEncoding.default, headers: headers)
-        
-        return result
-    }
-    
-    public static func refreshToken() -> Observable<(HTTPURLResponse, Any)> {
-        
-        let urlRefresh = baseURL + "/oauth/token"
-        
-        let refreshParams = ["grant_type": "refresh_token", "refresh_token": "\(Request.Token.RefreshToken)"]
-        
-        var headers:[String:String] = [String:String]()
-        headers["Authorization"] = "Basic aW9zOlNEYTVnU3VXZmdoNlFVVXU="
-        headers["Accept-Encoding"] = "gzip"
-        
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
         configuration.requestCachePolicy = .useProtocolCachePolicy
         
         let result = Request.sharedManager
-            .rx.responseJSON(.post, urlRefresh, parameters: refreshParams, encoding: URLEncoding.default , headers: headers)
+            .rx.responseJSON(method, url, parameters: parameters, encoding: encoding, headers: headers)
         
         return result
+        
     }
     
 }
