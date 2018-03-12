@@ -48,7 +48,7 @@ class Request {
     
     public static func headerToken(_ headers: [String: String]) -> Request.Type {
         self.headers = headers
-        self.headers["Authorization"] = "Basic aW9zOlNEYTVnU3VXZmdoNlFVVXU="
+        self.headers["Authorization"] = "\(ApiConstants.BasicAuthentication.BasicTypeToken) \(ApiConstants.BasicAuthentication.BasicAccessToken)"
         self.headers["Accept-Encoding"] = "gzip"
         return self
     }

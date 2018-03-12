@@ -13,11 +13,16 @@ extension RequestVariable {
     
     public struct ApiConstants {
         
-        struct Config {
+        public struct Config {
             static let BaseURL = "https://api-sandbox.mymixtapez.com"
         }
         
-        struct Token{
+        public struct BasicAuthentication {
+            static let BasicTypeToken   = "Basic"
+            static let BasicAccessToken = "aW9zOlNEYTVnU3VXZmdoNlFVVXU="
+        }
+        
+        public struct Token{
             static let AccessToken       = "RestShipAccessToken"
             static let RefreshToken      = "RestShipRefreshToken"
             static let ExpireToken       = "RestShipExpireToken"
@@ -30,7 +35,7 @@ extension RequestVariable {
             static let GroupDate         = "GroupRestShipRefresDate"
         }
         
-        struct UserDefaultGroup {
+        public struct UserDefaultGroup {
             static let GroupMyMixtapez = "group.com.mymixtapez.ios"
         }
         
