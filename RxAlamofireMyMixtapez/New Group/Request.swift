@@ -6,15 +6,8 @@
 //  Copyright © 2018 HugoSilva. All rights reserved.
 //
 
-import UIKit
-
 import RxSwift
 import Alamofire
-import RxAlamofire
-import ObjectMapper
-
-
-
 
 enum Method: String {
     case GET, POST, PUT, PATCH, DELETE
@@ -26,71 +19,8 @@ enum UrlEncoding {
 }
 
 class Request {
-    
-    public static let sharedManager: Alamofire.SessionManager = {
-        
-        let certificates = ServerTrustPolicy.certificates(in: Bundle.main)
-        let serverTrustPolicies: [String: ServerTrustPolicy] = [
-            "api.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            "api-sandbox.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            "search.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            "hits.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            "image.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            
-            "video.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            
-            "music.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            
-            "stream.mymixtapez.com": .pinCertificates(
-                certificates: certificates,
-                validateCertificateChain: true,
-                validateHost: true
-            )
-            
-        ]
-        
-        let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders = Alamofire.SessionManager.defaultHTTPHeaders
-        
-        
-        return Alamofire.SessionManager(configuration: configuration)
-        //return Alamofire.SessionManager(
-           // configuration: configuration,
-           // serverTrustPolicyManager: ServerTrustPolicyManager(policies: serverTrustPolicies)
-        //)
-        
-        
-    }()
-    
-    fileprivate static var baseURL: String = "https://api.mymixtapez.com"
+
+    fileprivate static var baseURL: String = ApiConstants.Config.BaseURL
     fileprivate static var url: String = baseURL
     fileprivate static var method: Alamofire.HTTPMethod = .get
     fileprivate static var parameters: [String: AnyObject] = [:]
@@ -108,18 +38,25 @@ class Request {
         return self
     }
     
-    
     public static func header(_ headers: [String: String]) -> Request.Type {
         self.headers = headers
+        self.headers["Authorization"] = "\(Request.Token.TokenType) \(Request.Token.AccessToken)"
+        self.headers["Content-Type"] = "application/json"
+        self.headers["Accept-Encoding"] = "gzip"
         return self
     }
     
+    public static func headerToken(_ headers: [String: String]) -> Request.Type {
+        self.headers = headers
+        self.headers["Authorization"] = "\(ApiConstants.BasicAuthentication.BasicTypeToken) \(ApiConstants.BasicAuthentication.BasicAccessToken)"
+        self.headers["Accept-Encoding"] = "gzip"
+        return self
+    }
     
     public static func encodParameters(_ encoding: UrlEncoding) -> Request.Type {
         self.encoding = encoding == .json ? JSONEncoding.default : URLEncoding.default
         return self
     }
-    
     
     public static func request() -> Observable<(HTTPURLResponse, Any)> {
         
@@ -127,15 +64,16 @@ class Request {
         headers["Content-Type"] = "application/json"
         headers["Accept-Encoding"] = "gzip"
         
+
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
         configuration.requestCachePolicy = .useProtocolCachePolicy
         
-        
         let result = Request.sharedManager
-            .rx.responseJSON(method, url, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .rx.responseJSON(method, url, parameters: parameters, encoding: encoding, headers: headers)
         
         return result
+        
     }
     
     public static func refreshToken() -> Observable<(HTTPURLResponse, Any)> {
