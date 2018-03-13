@@ -123,8 +123,7 @@ class Request {
     
     public static func request() -> Observable<(HTTPURLResponse, Any)> {
         
-        //headers["Authorization"] = "\(Request.Token.TokenType) \(Request.Token.AccessToken)"
-        headers["Authorization"] = "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjA2MzE3NTMsInVzZXJfbmFtZSI6IjI5NDI0MjAiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiOWNlY2ZlZDctNzdkNS00YzgwLWJkODMtYzU1NWJkZmViM2VhIiwiY2xpZW50X2lkIjoiYW5kcm9pZCIsInNjb3BlIjpbInJlYWQiXX0.foRux0psn2KOOIA7yw3B7n2WWJHhbiznj5VtsEeJ8eEE"
+        headers["Authorization"] = "\(Request.Token.TokenType) \(Request.Token.AccessToken)"
         headers["Content-Type"] = "application/json"
         headers["Accept-Encoding"] = "gzip"
         
@@ -138,6 +137,28 @@ class Request {
         
         return result
     }
+    
+    public static func refreshToken() -> Observable<(HTTPURLResponse, Any)> {
+        
+        
+        let urlRefresh = baseURL + "/oauth/token"
+        
+        let refreshParams = ["grant_type": "refresh_token", "refresh_token": "\(Request.Token.RefreshToken)"]
+        
+        var headers:[String:String] = [String:String]()
+        headers["Authorization"] = "Basic aW9zOlNEYTVnU3VXZmdoNlFVVXU="
+        headers["Accept-Encoding"] = "gzip"
+        
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+        configuration.requestCachePolicy = .useProtocolCachePolicy
+        
+        let result = Request.sharedManager
+            .rx.responseJSON(.post, urlRefresh, parameters: refreshParams, encoding: URLEncoding.default , headers: headers)
+        
+        return result
+    }
+
     
 }
 

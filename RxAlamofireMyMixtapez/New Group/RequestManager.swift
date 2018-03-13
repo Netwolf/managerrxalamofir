@@ -33,7 +33,7 @@ class RequestManager {
         
        
         return Promise { fullFill, reject in
-            observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).mapRequest().observeOn(scheduler).retry(retries).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
+            observable(url: url, parameters: [:], headers: [:]).subscribeOn(schedulerType).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = true }).mapRequest().retryWithAuthIfNeeded().observeOn(scheduler).retry(1).do(onNext: { _ in UIApplication.shared.isNetworkActivityIndicatorVisible = false }).subscribe(onNext: { objectResponse in
                     fullFill(objectResponse)
             },onError: { error in
                 reject(self.errorManager.handle(error: error))
